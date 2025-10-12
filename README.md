@@ -209,4 +209,8 @@ target_include_directories(micro_ROS_UART PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/libmicroros/include
 )
+
+# Modify the below lines to enable/disable output over UART/USB
+pico_enable_stdio_usb(micro_ROS_UART 1)
+pico_enable_stdio_uart(micro_ROS_UART 0)
 ```
