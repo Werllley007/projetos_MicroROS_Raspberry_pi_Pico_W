@@ -214,3 +214,33 @@ target_include_directories(micro_ROS_UART PRIVATE
 pico_enable_stdio_usb(micro_ROS_UART 1)
 pico_enable_stdio_uart(micro_ROS_UART 0)
 ```
+
+
+# Projeto a ROS2 Foxy MicroRos Raspberry Pico W com Subscribe
+
+
+https://index.ros.org/p/teleop_twist_keyboard/#foxy
+
+Entre no conteiner:
+
+```bash
+cd /home/werlley/uros_ws/src
+git clone https://github.com/ros2/teleop_twist_keyboard.git
+cd ..
+colcon build --symlink-install
+```
+
+**Terminal 1**:
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/pico_subscriber
+```
+
+**Terminal 2**:
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/pico_subscriber
+```
+
+**Terminal 3**:
+```bash
+ros2 topic echo /pico_subscriber
+```
