@@ -8,6 +8,8 @@ Para seguir este manual, você precisará de:
 - Uma placa Raspberry Pi Pico W.
 - As extensões do VS Code C/C++ e CMake Tools instaladas.
 
+# Projeto a ROS2 Foxy MicroRos Raspberry Pico W via Serial
+
 ## 1. Instalação das Dependências Necessárias
 Começaremos instalando as ferramentas de desenvolvimento essenciais, incluindo o compilador ARM GCC e o CMake.
 
@@ -138,6 +140,71 @@ Monitorar o Tópico (Verifica o fluxo de dados):
 ros2 topic echo /pico_publisher
 ```
 
-# Espera-se ver a mensagem std_msgs/Int32 sendo publicada a cada segundo.
+### Espera-se ver a mensagem std_msgs/Int32 sendo publicada a cada segundo.
 Com isso, a ponte de comunicação entre sua Raspberry Pi Pico e o ROS 2 está completa!
-# projetos_MicroROS_Raspberry_pi_Pico_W
+
+
+
+# Projeto a ROS2 Foxy MicroRos Raspberry Pico W com Wifi
+
+### A. Rodar o Exemplo
+
+Mude aqui no arquivo picow_udp_transports.h:
+
+```bash
+#define ROS_AGENT_IP_ADDR   "192.168.0.8"    // You need modify IP
+```
+
+Coloque o IP que você encontrou com o comando abaixo:
+
+```bash
+ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1
+```
+
+Coloque os dados da rede (WIFI_SSID, WIFI_PASSWORD) no arquivo micro_ROS_UDP.c:
+
+```bash
+printf("Connecting to WiFi...\n");
+    if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000)) {
+        printf("failed to connect.\n");
+        return 1;
+    } else {
+        printf("Connected.\n");
+    }
+```
+
+### B. Rodar o Exemplo
+Verifique o nome do dispositivo serial (geralmente /dev/ttyACM0).
+
+Inicie o Agent com a taxa de baud correta:
+
+```bash
+ros2 run micro_ros_agent micro_ros_agent udp4 --port 8889
+```
+
+Sem entrar no conteiner:
+
+```bash
+docker run -it --rm --net=host microros/micro-ros-agent:foxy udp4 -p 8889
+```
+
+# Configure o CmakeLists.txt
+
+link_directories(libmicroros)
+add_executable(micro_ROS_UART 
+        micro_ROS_UART.c 
+        pico_uart_transport.c
+        picow_udp_transports.c
+)
+
+# Add the standard library to the build
+target_link_libraries(micro_ROS_UART
+        pico_stdlib
+        microros        
+)
+
+# Add the standard include files to the build
+target_include_directories(micro_ROS_UART PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/libmicroros/include
+)
