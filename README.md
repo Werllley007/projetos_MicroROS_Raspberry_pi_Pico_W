@@ -190,6 +190,7 @@ docker run -it --rm --net=host microros/micro-ros-agent:foxy udp4 -p 8889
 
 # Configure o CmakeLists.txt
 
+```bash
 link_directories(libmicroros)
 add_executable(micro_ROS_UART 
         micro_ROS_UART.c 
@@ -208,3 +209,4 @@ target_include_directories(micro_ROS_UART PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/libmicroros/include
 )
+```
