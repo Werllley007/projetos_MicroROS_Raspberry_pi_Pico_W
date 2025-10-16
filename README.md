@@ -103,7 +103,13 @@ sudo snap install micro-ros-agent
 sudo snap set core experimental.hotplug=true
 sudo systemctl restart snapd
 
-# 3. Conectar a permissão serial (A Pico deve estar plugada)
+# 3. Verificar os Slots Disponíveis
+snap interface serial-port
+
+# slots:
+#  - snapd:pico
+
+# 4. Conectar a permissão serial (A Pico deve estar plugada)
 snap connect micro-ros-agent:serial-port snapd:pico
 ```
 
