@@ -241,15 +241,15 @@ colcon build --symlink-install
 
 **Terminal 1**:
 ```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/pico_subscriber
+docker run -it --rm --net=host microros/micro-ros-agent:foxy udp4 -p 8889
 ```
 
 **Terminal 2**:
 ```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/pico_subscriber
+ros2 topic echo /pico_subscriber
 ```
 
 **Terminal 3**:
 ```bash
-ros2 topic echo /pico_subscriber
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args --remap cmd_vel:=/pico_subscriber
 ```
